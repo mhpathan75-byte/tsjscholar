@@ -143,7 +143,7 @@ export function NotificationBell() {
                   </div>
                   <button
                     onClick={async (e) => { e.preventDefault(); e.stopPropagation(); await del({ data: { id: n.id } }); refresh(); }}
-                    className="self-start p-1 text-muted-foreground opacity-0 transition hover:text-destructive group-hover:opacity-100"
+                    className="self-start p-1 text-muted-foreground transition hover:text-destructive sm:opacity-0 sm:group-hover:opacity-100"
                     aria-label="Delete"
                   >
                     <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M6 18L18 6"/></svg>
