@@ -67,44 +67,50 @@ function DashboardShell() {
     <div className="flex min-h-screen flex-col bg-parchment">
       {/* Top bar */}
       <header className="sticky top-0 z-30 border-b border-border bg-sidebar text-sidebar-foreground shadow-soft">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-3">
+        <div className="mx-auto grid max-w-[1600px] grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-3 py-3 sm:gap-4 sm:px-6">
+          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <button
               aria-label="Open menu"
               onClick={() => setMobileOpen(true)}
-              className="rounded-lg p-2 hover:bg-sidebar-accent md:hidden"
+              className="shrink-0 rounded-lg p-2 hover:bg-sidebar-accent md:hidden"
             >
               <Icon d="M4 6h16M4 12h16M4 18h16" />
             </button>
-            <Link to="/dashboard" className="flex items-center gap-2">
-              <Logo withText={false} className="h-9 w-9" />
-              <span className="hidden font-display text-lg font-semibold sm:inline">TSJ Scholar Palanpur</span>
+            <Link to="/dashboard" className="flex min-w-0 items-center gap-2">
+              <Logo withText={false} className="h-9 w-9 shrink-0" />
+              <span className="hidden truncate font-display text-lg font-semibold sm:inline">TSJ Scholar Palanpur</span>
             </Link>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-3">
             <NotificationBell />
             <button
               onClick={() => window.dispatchEvent(new Event("tsj:open-tour"))}
-              className="hidden rounded-lg border border-sidebar-border px-3 py-1.5 text-xs uppercase tracking-widest hover:bg-sidebar-accent sm:block"
+              className="hidden rounded-lg border border-sidebar-border px-3 py-1.5 text-xs uppercase tracking-widest hover:bg-sidebar-accent lg:block"
               title="Show me how to use this app"
             >
               How to use
             </button>
-            <div className="hidden text-right sm:block">
-              <div className="text-sm font-medium">{profile.full_name}</div>
-              <div className="text-[10px] uppercase tracking-[0.18em] text-sidebar-primary">
+            <div className="hidden min-w-0 text-right lg:block">
+              <div className="truncate text-sm font-medium">{profile.full_name}</div>
+              <div className="truncate text-[10px] uppercase tracking-[0.18em] text-sidebar-primary">
                 {roleLabel}{profile.subject ? ` · ${profile.subject}` : ""}{profile.exam_track ? ` · ${profile.exam_track}` : ""}
               </div>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-gold font-display text-sm font-bold text-ink">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-gold font-display text-sm font-bold text-ink sm:h-10 sm:w-10">
               {initials}
             </div>
-            <button onClick={signOut} className="rounded-lg border border-sidebar-border px-3 py-1.5 text-xs uppercase tracking-widest hover:bg-sidebar-accent">
-              Sign out
+            <button
+              onClick={signOut}
+              aria-label="Sign out"
+              className="shrink-0 rounded-lg border border-sidebar-border px-2 py-1.5 text-xs uppercase tracking-widest hover:bg-sidebar-accent sm:px-3"
+            >
+              <span className="hidden sm:inline">Sign out</span>
+              <span className="sm:hidden">Exit</span>
             </button>
           </div>
         </div>
+
       </header>
 
       <div className="mx-auto flex w-full max-w-[1600px] flex-1">
