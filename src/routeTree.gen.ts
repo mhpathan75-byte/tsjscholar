@@ -9,38 +9,297 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as ExamAttemptIdRouteImport } from './routes/exam.$attemptId'
+import { Route as ExamResultsAttemptIdRouteImport } from './routes/exam-results.$attemptId'
+import { Route as DashboardTestsRouteImport } from './routes/dashboard.tests'
+import { Route as DashboardStudentsRouteImport } from './routes/dashboard.students'
+import { Route as DashboardReportsRouteImport } from './routes/dashboard.reports'
+import { Route as DashboardNotificationsRouteImport } from './routes/dashboard.notifications'
+import { Route as DashboardMaterialsRouteImport } from './routes/dashboard.materials'
+import { Route as DashboardGlimpectRouteImport } from './routes/dashboard.glimpect'
+import { Route as DashboardGalleryRouteImport } from './routes/dashboard.gallery'
+import { Route as DashboardFeesRouteImport } from './routes/dashboard.fees'
+import { Route as DashboardDoubtsRouteImport } from './routes/dashboard.doubts'
+import { Route as DashboardCalendarRouteImport } from './routes/dashboard.calendar'
+import { Route as DashboardAshraRouteImport } from './routes/dashboard.ashra'
+import { Route as DashboardAnnouncementsRouteImport } from './routes/dashboard.announcements'
+import { Route as DashboardTestsIndexRouteImport } from './routes/dashboard.tests.index'
+import { Route as DashboardTestsTestIdRouteImport } from './routes/dashboard.tests.$testId'
+import { Route as ApiPublicSeedRouteImport } from './routes/api/public/seed'
 
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const ExamAttemptIdRoute = ExamAttemptIdRouteImport.update({
+  id: '/exam/$attemptId',
+  path: '/exam/$attemptId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExamResultsAttemptIdRoute = ExamResultsAttemptIdRouteImport.update({
+  id: '/exam-results/$attemptId',
+  path: '/exam-results/$attemptId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardTestsRoute = DashboardTestsRouteImport.update({
+  id: '/tests',
+  path: '/tests',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardStudentsRoute = DashboardStudentsRouteImport.update({
+  id: '/students',
+  path: '/students',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardReportsRoute = DashboardReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardNotificationsRoute = DashboardNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardMaterialsRoute = DashboardMaterialsRouteImport.update({
+  id: '/materials',
+  path: '/materials',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardGlimpectRoute = DashboardGlimpectRouteImport.update({
+  id: '/glimpect',
+  path: '/glimpect',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardGalleryRoute = DashboardGalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardFeesRoute = DashboardFeesRouteImport.update({
+  id: '/fees',
+  path: '/fees',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardDoubtsRoute = DashboardDoubtsRouteImport.update({
+  id: '/doubts',
+  path: '/doubts',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardCalendarRoute = DashboardCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAshraRoute = DashboardAshraRouteImport.update({
+  id: '/ashra',
+  path: '/ashra',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAnnouncementsRoute = DashboardAnnouncementsRouteImport.update({
+  id: '/announcements',
+  path: '/announcements',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardTestsIndexRoute = DashboardTestsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardTestsRoute,
+} as any)
+const DashboardTestsTestIdRoute = DashboardTestsTestIdRouteImport.update({
+  id: '/$testId',
+  path: '/$testId',
+  getParentRoute: () => DashboardTestsRoute,
+} as any)
+const ApiPublicSeedRoute = ApiPublicSeedRouteImport.update({
+  id: '/api/public/seed',
+  path: '/api/public/seed',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/announcements': typeof DashboardAnnouncementsRoute
+  '/dashboard/ashra': typeof DashboardAshraRoute
+  '/dashboard/calendar': typeof DashboardCalendarRoute
+  '/dashboard/doubts': typeof DashboardDoubtsRoute
+  '/dashboard/fees': typeof DashboardFeesRoute
+  '/dashboard/gallery': typeof DashboardGalleryRoute
+  '/dashboard/glimpect': typeof DashboardGlimpectRoute
+  '/dashboard/materials': typeof DashboardMaterialsRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
+  '/dashboard/students': typeof DashboardStudentsRoute
+  '/dashboard/tests': typeof DashboardTestsRouteWithChildren
+  '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
+  '/exam/$attemptId': typeof ExamAttemptIdRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/api/public/seed': typeof ApiPublicSeedRoute
+  '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
+  '/dashboard/tests/': typeof DashboardTestsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/dashboard/announcements': typeof DashboardAnnouncementsRoute
+  '/dashboard/ashra': typeof DashboardAshraRoute
+  '/dashboard/calendar': typeof DashboardCalendarRoute
+  '/dashboard/doubts': typeof DashboardDoubtsRoute
+  '/dashboard/fees': typeof DashboardFeesRoute
+  '/dashboard/gallery': typeof DashboardGalleryRoute
+  '/dashboard/glimpect': typeof DashboardGlimpectRoute
+  '/dashboard/materials': typeof DashboardMaterialsRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
+  '/dashboard/students': typeof DashboardStudentsRoute
+  '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
+  '/exam/$attemptId': typeof ExamAttemptIdRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/api/public/seed': typeof ApiPublicSeedRoute
+  '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
+  '/dashboard/tests': typeof DashboardTestsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/announcements': typeof DashboardAnnouncementsRoute
+  '/dashboard/ashra': typeof DashboardAshraRoute
+  '/dashboard/calendar': typeof DashboardCalendarRoute
+  '/dashboard/doubts': typeof DashboardDoubtsRoute
+  '/dashboard/fees': typeof DashboardFeesRoute
+  '/dashboard/gallery': typeof DashboardGalleryRoute
+  '/dashboard/glimpect': typeof DashboardGlimpectRoute
+  '/dashboard/materials': typeof DashboardMaterialsRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
+  '/dashboard/students': typeof DashboardStudentsRoute
+  '/dashboard/tests': typeof DashboardTestsRouteWithChildren
+  '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
+  '/exam/$attemptId': typeof ExamAttemptIdRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/api/public/seed': typeof ApiPublicSeedRoute
+  '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
+  '/dashboard/tests/': typeof DashboardTestsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/dashboard/announcements'
+    | '/dashboard/ashra'
+    | '/dashboard/calendar'
+    | '/dashboard/doubts'
+    | '/dashboard/fees'
+    | '/dashboard/gallery'
+    | '/dashboard/glimpect'
+    | '/dashboard/materials'
+    | '/dashboard/notifications'
+    | '/dashboard/reports'
+    | '/dashboard/students'
+    | '/dashboard/tests'
+    | '/exam-results/$attemptId'
+    | '/exam/$attemptId'
+    | '/dashboard/'
+    | '/api/public/seed'
+    | '/dashboard/tests/$testId'
+    | '/dashboard/tests/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard/announcements'
+    | '/dashboard/ashra'
+    | '/dashboard/calendar'
+    | '/dashboard/doubts'
+    | '/dashboard/fees'
+    | '/dashboard/gallery'
+    | '/dashboard/glimpect'
+    | '/dashboard/materials'
+    | '/dashboard/notifications'
+    | '/dashboard/reports'
+    | '/dashboard/students'
+    | '/exam-results/$attemptId'
+    | '/exam/$attemptId'
+    | '/dashboard'
+    | '/api/public/seed'
+    | '/dashboard/tests/$testId'
+    | '/dashboard/tests'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/dashboard/announcements'
+    | '/dashboard/ashra'
+    | '/dashboard/calendar'
+    | '/dashboard/doubts'
+    | '/dashboard/fees'
+    | '/dashboard/gallery'
+    | '/dashboard/glimpect'
+    | '/dashboard/materials'
+    | '/dashboard/notifications'
+    | '/dashboard/reports'
+    | '/dashboard/students'
+    | '/dashboard/tests'
+    | '/exam-results/$attemptId'
+    | '/exam/$attemptId'
+    | '/dashboard/'
+    | '/api/public/seed'
+    | '/dashboard/tests/$testId'
+    | '/dashboard/tests/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
+  ExamResultsAttemptIdRoute: typeof ExamResultsAttemptIdRoute
+  ExamAttemptIdRoute: typeof ExamAttemptIdRoute
+  ApiPublicSeedRoute: typeof ApiPublicSeedRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +307,193 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/exam/$attemptId': {
+      id: '/exam/$attemptId'
+      path: '/exam/$attemptId'
+      fullPath: '/exam/$attemptId'
+      preLoaderRoute: typeof ExamAttemptIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exam-results/$attemptId': {
+      id: '/exam-results/$attemptId'
+      path: '/exam-results/$attemptId'
+      fullPath: '/exam-results/$attemptId'
+      preLoaderRoute: typeof ExamResultsAttemptIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/tests': {
+      id: '/dashboard/tests'
+      path: '/tests'
+      fullPath: '/dashboard/tests'
+      preLoaderRoute: typeof DashboardTestsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/students': {
+      id: '/dashboard/students'
+      path: '/students'
+      fullPath: '/dashboard/students'
+      preLoaderRoute: typeof DashboardStudentsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/reports': {
+      id: '/dashboard/reports'
+      path: '/reports'
+      fullPath: '/dashboard/reports'
+      preLoaderRoute: typeof DashboardReportsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/notifications': {
+      id: '/dashboard/notifications'
+      path: '/notifications'
+      fullPath: '/dashboard/notifications'
+      preLoaderRoute: typeof DashboardNotificationsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/materials': {
+      id: '/dashboard/materials'
+      path: '/materials'
+      fullPath: '/dashboard/materials'
+      preLoaderRoute: typeof DashboardMaterialsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/glimpect': {
+      id: '/dashboard/glimpect'
+      path: '/glimpect'
+      fullPath: '/dashboard/glimpect'
+      preLoaderRoute: typeof DashboardGlimpectRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/gallery': {
+      id: '/dashboard/gallery'
+      path: '/gallery'
+      fullPath: '/dashboard/gallery'
+      preLoaderRoute: typeof DashboardGalleryRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/fees': {
+      id: '/dashboard/fees'
+      path: '/fees'
+      fullPath: '/dashboard/fees'
+      preLoaderRoute: typeof DashboardFeesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/doubts': {
+      id: '/dashboard/doubts'
+      path: '/doubts'
+      fullPath: '/dashboard/doubts'
+      preLoaderRoute: typeof DashboardDoubtsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/calendar': {
+      id: '/dashboard/calendar'
+      path: '/calendar'
+      fullPath: '/dashboard/calendar'
+      preLoaderRoute: typeof DashboardCalendarRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/ashra': {
+      id: '/dashboard/ashra'
+      path: '/ashra'
+      fullPath: '/dashboard/ashra'
+      preLoaderRoute: typeof DashboardAshraRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/announcements': {
+      id: '/dashboard/announcements'
+      path: '/announcements'
+      fullPath: '/dashboard/announcements'
+      preLoaderRoute: typeof DashboardAnnouncementsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/tests/': {
+      id: '/dashboard/tests/'
+      path: '/'
+      fullPath: '/dashboard/tests/'
+      preLoaderRoute: typeof DashboardTestsIndexRouteImport
+      parentRoute: typeof DashboardTestsRoute
+    }
+    '/dashboard/tests/$testId': {
+      id: '/dashboard/tests/$testId'
+      path: '/$testId'
+      fullPath: '/dashboard/tests/$testId'
+      preLoaderRoute: typeof DashboardTestsTestIdRouteImport
+      parentRoute: typeof DashboardTestsRoute
+    }
+    '/api/public/seed': {
+      id: '/api/public/seed'
+      path: '/api/public/seed'
+      fullPath: '/api/public/seed'
+      preLoaderRoute: typeof ApiPublicSeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface DashboardTestsRouteChildren {
+  DashboardTestsTestIdRoute: typeof DashboardTestsTestIdRoute
+  DashboardTestsIndexRoute: typeof DashboardTestsIndexRoute
+}
+
+const DashboardTestsRouteChildren: DashboardTestsRouteChildren = {
+  DashboardTestsTestIdRoute: DashboardTestsTestIdRoute,
+  DashboardTestsIndexRoute: DashboardTestsIndexRoute,
+}
+
+const DashboardTestsRouteWithChildren = DashboardTestsRoute._addFileChildren(
+  DashboardTestsRouteChildren,
+)
+
+interface DashboardRouteChildren {
+  DashboardAnnouncementsRoute: typeof DashboardAnnouncementsRoute
+  DashboardAshraRoute: typeof DashboardAshraRoute
+  DashboardCalendarRoute: typeof DashboardCalendarRoute
+  DashboardDoubtsRoute: typeof DashboardDoubtsRoute
+  DashboardFeesRoute: typeof DashboardFeesRoute
+  DashboardGalleryRoute: typeof DashboardGalleryRoute
+  DashboardGlimpectRoute: typeof DashboardGlimpectRoute
+  DashboardMaterialsRoute: typeof DashboardMaterialsRoute
+  DashboardNotificationsRoute: typeof DashboardNotificationsRoute
+  DashboardReportsRoute: typeof DashboardReportsRoute
+  DashboardStudentsRoute: typeof DashboardStudentsRoute
+  DashboardTestsRoute: typeof DashboardTestsRouteWithChildren
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAnnouncementsRoute: DashboardAnnouncementsRoute,
+  DashboardAshraRoute: DashboardAshraRoute,
+  DashboardCalendarRoute: DashboardCalendarRoute,
+  DashboardDoubtsRoute: DashboardDoubtsRoute,
+  DashboardFeesRoute: DashboardFeesRoute,
+  DashboardGalleryRoute: DashboardGalleryRoute,
+  DashboardGlimpectRoute: DashboardGlimpectRoute,
+  DashboardMaterialsRoute: DashboardMaterialsRoute,
+  DashboardNotificationsRoute: DashboardNotificationsRoute,
+  DashboardReportsRoute: DashboardReportsRoute,
+  DashboardStudentsRoute: DashboardStudentsRoute,
+  DashboardTestsRoute: DashboardTestsRouteWithChildren,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
+  DashboardRoute: DashboardRouteWithChildren,
+  ExamResultsAttemptIdRoute: ExamResultsAttemptIdRoute,
+  ExamAttemptIdRoute: ExamAttemptIdRoute,
+  ApiPublicSeedRoute: ApiPublicSeedRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
