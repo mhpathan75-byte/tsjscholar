@@ -47,6 +47,16 @@ function isH3SwallowedErrorBody(body: string): boolean {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      // The deployed Worker exposes runtime bindings through `env`, while the
+      // generated Cloud clients read the Node-compatible process.env contract.
+      // Bridge string bindings once per request before any server module runs.
+      if (env && typeof env === "object") {
+        for (const [key, value] of Object.entries(env as Record<string, unknown>)) {
+          if (typeof value === "string" && process.env[key] === undefined) {
+            process.env[key] = value;
+          }
+        }
+      }
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
