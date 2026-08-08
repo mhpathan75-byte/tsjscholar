@@ -113,7 +113,7 @@ function DashboardShell() {
 
       </header>
 
-      <div className="mx-auto flex w-full max-w-[1600px] flex-1">
+      <div className="mx-auto flex w-full min-w-0 max-w-[1600px] flex-1">
         {/* Sidebar desktop */}
         <aside className="hidden w-64 shrink-0 border-r border-border bg-card md:block">
           <SidebarNav nav={nav} onNavigate={() => {}} />
@@ -123,22 +123,35 @@ function DashboardShell() {
         {mobileOpen && (
           <div className="fixed inset-0 z-40 md:hidden">
             <div className="absolute inset-0 bg-black/50" onClick={() => setMobileOpen(false)} />
-            <aside className="absolute left-0 top-0 h-full w-72 bg-card shadow-elegant">
-              <div className="flex items-center justify-between border-b border-border p-4">
-                <Logo />
-                <button aria-label="Close" onClick={() => setMobileOpen(false)} className="rounded-lg p-2 hover:bg-muted">
+            <aside className="absolute left-0 top-0 flex h-full w-[82%] max-w-xs flex-col overflow-y-auto bg-card shadow-elegant">
+              <div className="flex items-center justify-between gap-2 border-b border-border p-4">
+                <div className="min-w-0"><Logo /></div>
+                <button aria-label="Close" onClick={() => setMobileOpen(false)} className="shrink-0 rounded-lg p-2 hover:bg-muted">
                   <Icon d="M6 6l12 12M6 18L18 6" />
                 </button>
               </div>
+              <div className="border-b border-border px-4 py-3">
+                <div className="truncate text-sm font-medium">{profile.full_name}</div>
+                <div className="truncate text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  {roleLabel}{profile.subject ? ` · ${profile.subject}` : ""}{profile.exam_track ? ` · ${profile.exam_track}` : ""}
+                </div>
+              </div>
               <SidebarNav nav={nav} onNavigate={() => setMobileOpen(false)} />
+              <button
+                onClick={() => { setMobileOpen(false); window.dispatchEvent(new Event("tsj:open-tour")); }}
+                className="mx-4 mb-6 rounded-xl border border-border px-3 py-2 text-xs uppercase tracking-widest"
+              >
+                How to use
+              </button>
             </aside>
           </div>
         )}
 
-        <main className="flex-1 px-4 py-8 sm:px-8">
+        <main className="min-w-0 flex-1 px-3 py-6 sm:px-8 sm:py-8">
           <Outlet />
         </main>
       </div>
+
 
       <Footer />
       <OnboardingTour role={profile.role} />
