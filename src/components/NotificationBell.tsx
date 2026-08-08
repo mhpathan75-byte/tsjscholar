@@ -120,7 +120,7 @@ export function NotificationBell() {
               )}
             </div>
           </div>
-          <div className="max-h-[420px] overflow-y-auto">
+          <div className="max-h-[70vh] overflow-y-auto sm:max-h-[420px]">
             {rows.length === 0 && (
               <div className="p-8 text-center text-sm text-muted-foreground">You're all caught up ✨</div>
             )}
