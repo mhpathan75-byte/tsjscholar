@@ -22,7 +22,13 @@ export type Database = {
           created_at: string
           id: string
           image_url: string | null
+          image_urls: string[] | null
+          links: string[] | null
+          pinned: boolean | null
+          priority: string | null
+          scheduled_for: string | null
           title: string
+          updated_at: string
         }
         Insert: {
           audience?: string
@@ -31,7 +37,13 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
+          image_urls?: string[] | null
+          links?: string[] | null
+          pinned?: boolean | null
+          priority?: string | null
+          scheduled_for?: string | null
           title: string
+          updated_at?: string
         }
         Update: {
           audience?: string
@@ -40,7 +52,13 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
+          image_urls?: string[] | null
+          links?: string[] | null
+          pinned?: boolean | null
+          priority?: string | null
+          scheduled_for?: string | null
           title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -103,6 +121,42 @@ export type Database = {
           },
         ]
       }
+      calendar_events: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          end_date: string | null
+          event_date: string
+          event_type: string
+          id: string
+          related_id: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string | null
+          end_date?: string | null
+          event_date: string
+          event_type?: string
+          id?: string
+          related_id?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          end_date?: string | null
+          event_date?: string
+          event_type?: string
+          id?: string
+          related_id?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
       doubts: {
         Row: {
           answer: string | null
@@ -145,42 +199,300 @@ export type Database = {
         }
         Relationships: []
       }
-      materials: {
+      fee_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          method: string | null
+          paid_on: string
+          recorded_by: string | null
+          remarks: string | null
+          student_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          method?: string | null
+          paid_on?: string
+          recorded_by?: string | null
+          remarks?: string | null
+          student_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          method?: string | null
+          paid_on?: string
+          recorded_by?: string | null
+          remarks?: string | null
+          student_id?: string
+        }
+        Relationships: []
+      }
+      fees: {
         Row: {
           created_at: string
+          due_date: string | null
+          id: string
+          remarks: string | null
+          student_id: string
+          total_amount: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          remarks?: string | null
+          student_id: string
+          total_amount?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          remarks?: string | null
+          student_id?: string
+          total_amount?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      gallery_albums: {
+        Row: {
+          cover_url: string | null
+          created_at: string
+          created_by: string
           description: string | null
+          event_date: string | null
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          cover_url?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          event_date?: string | null
+          id?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          cover_url?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          event_date?: string | null
+          id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      gallery_images: {
+        Row: {
+          album_id: string
+          caption: string | null
+          created_at: string
+          id: string
+          storage_path: string
+          uploaded_by: string
+        }
+        Insert: {
+          album_id: string
+          caption?: string | null
+          created_at?: string
+          id?: string
+          storage_path: string
+          uploaded_by: string
+        }
+        Update: {
+          album_id?: string
+          caption?: string | null
+          created_at?: string
+          id?: string
+          storage_path?: string
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gallery_images_album_id_fkey"
+            columns: ["album_id"]
+            isOneToOne: false
+            referencedRelation: "gallery_albums"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      material_favorites: {
+        Row: {
+          created_at: string
+          material_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          material_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          material_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "material_favorites_material_id_fkey"
+            columns: ["material_id"]
+            isOneToOne: false
+            referencedRelation: "materials"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      material_views: {
+        Row: {
+          id: string
+          material_id: string
+          user_id: string
+          viewed_at: string
+        }
+        Insert: {
+          id?: string
+          material_id: string
+          user_id: string
+          viewed_at?: string
+        }
+        Update: {
+          id?: string
+          material_id?: string
+          user_id?: string
+          viewed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "material_views_material_id_fkey"
+            columns: ["material_id"]
+            isOneToOne: false
+            referencedRelation: "materials"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      materials: {
+        Row: {
+          academic_year: string | null
+          category: string | null
+          chapter: string | null
+          created_at: string
+          description: string | null
+          download_count: number | null
           file_name: string
           file_path: string
           id: string
           mime_type: string | null
+          pinned: boolean | null
           size_bytes: number | null
+          stream: string | null
           subject: string | null
+          tags: string[] | null
           title: string
+          topic: string | null
           uploader_id: string
+          visibility: string | null
         }
         Insert: {
+          academic_year?: string | null
+          category?: string | null
+          chapter?: string | null
           created_at?: string
           description?: string | null
+          download_count?: number | null
           file_name: string
           file_path: string
           id?: string
           mime_type?: string | null
+          pinned?: boolean | null
           size_bytes?: number | null
+          stream?: string | null
           subject?: string | null
+          tags?: string[] | null
           title: string
+          topic?: string | null
           uploader_id: string
+          visibility?: string | null
         }
         Update: {
+          academic_year?: string | null
+          category?: string | null
+          chapter?: string | null
           created_at?: string
           description?: string | null
+          download_count?: number | null
           file_name?: string
           file_path?: string
           id?: string
           mime_type?: string | null
+          pinned?: boolean | null
           size_bytes?: number | null
+          stream?: string | null
           subject?: string | null
+          tags?: string[] | null
           title?: string
+          topic?: string | null
           uploader_id?: string
+          visibility?: string | null
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          category: string
+          created_at: string
+          icon: string | null
+          id: string
+          link: string | null
+          message: string | null
+          read_at: string | null
+          sender_id: string | null
+          sender_name: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          icon?: string | null
+          id?: string
+          link?: string | null
+          message?: string | null
+          read_at?: string | null
+          sender_id?: string | null
+          sender_name?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          icon?: string | null
+          id?: string
+          link?: string | null
+          message?: string | null
+          read_at?: string | null
+          sender_id?: string | null
+          sender_name?: string | null
+          title?: string
+          user_id?: string
         }
         Relationships: []
       }
