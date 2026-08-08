@@ -121,6 +121,57 @@ export type Database = {
           },
         ]
       }
+      attempt_responses: {
+        Row: {
+          answer: Json
+          attempt_id: string
+          id: string
+          is_correct: boolean | null
+          marks_awarded: number | null
+          question_id: string
+          saved_at: string
+          state: string
+          time_seconds: number
+        }
+        Insert: {
+          answer?: Json
+          attempt_id: string
+          id?: string
+          is_correct?: boolean | null
+          marks_awarded?: number | null
+          question_id: string
+          saved_at?: string
+          state?: string
+          time_seconds?: number
+        }
+        Update: {
+          answer?: Json
+          attempt_id?: string
+          id?: string
+          is_correct?: boolean | null
+          marks_awarded?: number | null
+          question_id?: string
+          saved_at?: string
+          state?: string
+          time_seconds?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attempt_responses_attempt_id_fkey"
+            columns: ["attempt_id"]
+            isOneToOne: false
+            referencedRelation: "test_attempts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attempt_responses_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       calendar_events: {
         Row: {
           created_at: string
@@ -499,6 +550,7 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          class_level: number | null
           created_at: string
           exam_track: Database["public"]["Enums"]["exam_track"] | null
           full_name: string
@@ -510,6 +562,7 @@ export type Database = {
         }
         Insert: {
           avatar_url?: string | null
+          class_level?: number | null
           created_at?: string
           exam_track?: Database["public"]["Enums"]["exam_track"] | null
           full_name: string
@@ -521,6 +574,7 @@ export type Database = {
         }
         Update: {
           avatar_url?: string | null
+          class_level?: number | null
           created_at?: string
           exam_track?: Database["public"]["Enums"]["exam_track"] | null
           full_name?: string
@@ -531,6 +585,435 @@ export type Database = {
           username?: string | null
         }
         Relationships: []
+      }
+      question_reports: {
+        Row: {
+          attempt_id: string
+          created_at: string
+          details: string
+          id: string
+          question_id: string
+          reason: string
+          status: string
+          student_id: string
+        }
+        Insert: {
+          attempt_id: string
+          created_at?: string
+          details?: string
+          id?: string
+          question_id: string
+          reason: string
+          status?: string
+          student_id: string
+        }
+        Update: {
+          attempt_id?: string
+          created_at?: string
+          details?: string
+          id?: string
+          question_id?: string
+          reason?: string
+          status?: string
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_reports_attempt_id_fkey"
+            columns: ["attempt_id"]
+            isOneToOne: false
+            referencedRelation: "test_attempts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "question_reports_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "question_reports_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      questions: {
+        Row: {
+          chapter: string
+          correct_answer: Json
+          created_at: string
+          created_by: string
+          diagrams: Json
+          difficulty: string
+          id: string
+          marks: number
+          metadata: Json
+          negative_marks: number
+          options: Json
+          passage: string | null
+          position: number
+          question_type: string
+          solution: string
+          source_kind: string
+          source_ref: string | null
+          stem: string
+          subject: string
+          version_id: string
+        }
+        Insert: {
+          chapter: string
+          correct_answer?: Json
+          created_at?: string
+          created_by: string
+          diagrams?: Json
+          difficulty: string
+          id?: string
+          marks?: number
+          metadata?: Json
+          negative_marks?: number
+          options?: Json
+          passage?: string | null
+          position: number
+          question_type: string
+          solution?: string
+          source_kind?: string
+          source_ref?: string | null
+          stem: string
+          subject: string
+          version_id: string
+        }
+        Update: {
+          chapter?: string
+          correct_answer?: Json
+          created_at?: string
+          created_by?: string
+          diagrams?: Json
+          difficulty?: string
+          id?: string
+          marks?: number
+          metadata?: Json
+          negative_marks?: number
+          options?: Json
+          passage?: string | null
+          position?: number
+          question_type?: string
+          solution?: string
+          source_kind?: string
+          source_ref?: string | null
+          stem?: string
+          subject?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "questions_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "test_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      test_attempts: {
+        Row: {
+          correct_count: number
+          created_at: string
+          id: string
+          incorrect_count: number
+          last_synced_at: string | null
+          max_score: number | null
+          option_orders: Json
+          percentage: number | null
+          question_order: string[]
+          rank: number | null
+          score: number | null
+          started_at: string | null
+          status: string
+          student_id: string
+          submit_reason: string | null
+          submitted_at: string | null
+          test_id: string
+          unattempted_count: number
+          version_id: string
+          violation_count: number
+        }
+        Insert: {
+          correct_count?: number
+          created_at?: string
+          id?: string
+          incorrect_count?: number
+          last_synced_at?: string | null
+          max_score?: number | null
+          option_orders?: Json
+          percentage?: number | null
+          question_order?: string[]
+          rank?: number | null
+          score?: number | null
+          started_at?: string | null
+          status?: string
+          student_id: string
+          submit_reason?: string | null
+          submitted_at?: string | null
+          test_id: string
+          unattempted_count?: number
+          version_id: string
+          violation_count?: number
+        }
+        Update: {
+          correct_count?: number
+          created_at?: string
+          id?: string
+          incorrect_count?: number
+          last_synced_at?: string | null
+          max_score?: number | null
+          option_orders?: Json
+          percentage?: number | null
+          question_order?: string[]
+          rank?: number | null
+          score?: number | null
+          started_at?: string | null
+          status?: string
+          student_id?: string
+          submit_reason?: string | null
+          submitted_at?: string | null
+          test_id?: string
+          unattempted_count?: number
+          version_id?: string
+          violation_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_attempts_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "test_attempts_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "tests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "test_attempts_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "test_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      test_versions: {
+        Row: {
+          change_reason: string
+          created_at: string
+          created_by: string
+          id: string
+          locked_at: string | null
+          test_id: string
+          version_number: number
+        }
+        Insert: {
+          change_reason?: string
+          created_at?: string
+          created_by: string
+          id?: string
+          locked_at?: string | null
+          test_id: string
+          version_number: number
+        }
+        Update: {
+          change_reason?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          locked_at?: string | null
+          test_id?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_versions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "test_versions_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "tests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      test_violations: {
+        Row: {
+          attempt_id: string
+          id: string
+          metadata: Json
+          occurred_at: string
+          question_id: string | null
+          reason: string
+          student_id: string
+          violation_type: string
+        }
+        Insert: {
+          attempt_id: string
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          question_id?: string | null
+          reason: string
+          student_id: string
+          violation_type: string
+        }
+        Update: {
+          attempt_id?: string
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          question_id?: string | null
+          reason?: string
+          student_id?: string
+          violation_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_violations_attempt_id_fkey"
+            columns: ["attempt_id"]
+            isOneToOne: false
+            referencedRelation: "test_attempts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "test_violations_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "test_violations_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tests: {
+        Row: {
+          active_version_id: string | null
+          chapters: Json
+          class_level: number
+          created_at: string
+          created_by: string
+          difficulty: Json
+          duration_minutes: number
+          ends_at: string | null
+          exam_type: string
+          id: string
+          instructions: string
+          language: string
+          negative_marks: number
+          partial_marking: boolean
+          positive_marks: number
+          question_types: string[]
+          scheduled_at: string | null
+          source_strategy: string
+          status: string
+          stream: string
+          subjects: string[]
+          title: string
+          total_marks: number
+          total_questions: number
+          updated_at: string
+        }
+        Insert: {
+          active_version_id?: string | null
+          chapters?: Json
+          class_level: number
+          created_at?: string
+          created_by: string
+          difficulty?: Json
+          duration_minutes: number
+          ends_at?: string | null
+          exam_type: string
+          id?: string
+          instructions?: string
+          language?: string
+          negative_marks?: number
+          partial_marking?: boolean
+          positive_marks?: number
+          question_types?: string[]
+          scheduled_at?: string | null
+          source_strategy?: string
+          status?: string
+          stream: string
+          subjects?: string[]
+          title: string
+          total_marks: number
+          total_questions: number
+          updated_at?: string
+        }
+        Update: {
+          active_version_id?: string | null
+          chapters?: Json
+          class_level?: number
+          created_at?: string
+          created_by?: string
+          difficulty?: Json
+          duration_minutes?: number
+          ends_at?: string | null
+          exam_type?: string
+          id?: string
+          instructions?: string
+          language?: string
+          negative_marks?: number
+          partial_marking?: boolean
+          positive_marks?: number
+          question_types?: string[]
+          scheduled_at?: string | null
+          source_strategy?: string
+          status?: string
+          stream?: string
+          subjects?: string[]
+          title?: string
+          total_marks?: number
+          total_questions?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tests_active_version_fkey"
+            columns: ["active_version_id"]
+            isOneToOne: false
+            referencedRelation: "test_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tests_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
