@@ -110,9 +110,12 @@ export type Database = {
           answered_by: string | null
           created_at: string
           id: string
+          image_urls: string[]
           question: string
+          specific_teacher_id: string | null
           student_id: string
           subject: string
+          visibility: string
         }
         Insert: {
           answer?: string | null
@@ -120,9 +123,12 @@ export type Database = {
           answered_by?: string | null
           created_at?: string
           id?: string
+          image_urls?: string[]
           question: string
+          specific_teacher_id?: string | null
           student_id: string
           subject: string
+          visibility?: string
         }
         Update: {
           answer?: string | null
@@ -130,9 +136,51 @@ export type Database = {
           answered_by?: string | null
           created_at?: string
           id?: string
+          image_urls?: string[]
           question?: string
+          specific_teacher_id?: string | null
           student_id?: string
           subject?: string
+          visibility?: string
+        }
+        Relationships: []
+      }
+      materials: {
+        Row: {
+          created_at: string
+          description: string | null
+          file_name: string
+          file_path: string
+          id: string
+          mime_type: string | null
+          size_bytes: number | null
+          subject: string | null
+          title: string
+          uploader_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          file_name: string
+          file_path: string
+          id?: string
+          mime_type?: string | null
+          size_bytes?: number | null
+          subject?: string | null
+          title: string
+          uploader_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          file_name?: string
+          file_path?: string
+          id?: string
+          mime_type?: string | null
+          size_bytes?: number | null
+          subject?: string | null
+          title?: string
+          uploader_id?: string
         }
         Relationships: []
       }
