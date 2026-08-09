@@ -211,6 +211,7 @@ export type Database = {
       doubts: {
         Row: {
           answer: string | null
+          answer_files: Json
           answered_at: string | null
           answered_by: string | null
           created_at: string
@@ -224,6 +225,7 @@ export type Database = {
         }
         Insert: {
           answer?: string | null
+          answer_files?: Json
           answered_at?: string | null
           answered_by?: string | null
           created_at?: string
@@ -237,6 +239,7 @@ export type Database = {
         }
         Update: {
           answer?: string | null
+          answer_files?: Json
           answered_at?: string | null
           answered_by?: string | null
           created_at?: string

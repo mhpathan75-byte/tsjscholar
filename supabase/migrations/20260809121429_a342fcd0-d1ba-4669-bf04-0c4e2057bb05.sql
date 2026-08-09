@@ -1,0 +1,1 @@
+ALTER TABLE public.doubts ADD COLUMN IF NOT EXISTS answer_files jsonb NOT NULL DEFAULT '[]'::jsonb;
