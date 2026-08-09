@@ -68,7 +68,8 @@ export async function buildAttempt(supabase: SupabaseClient, testId: string, use
   for (const [subject, ids] of grouped) if (!subjectOrder.includes(subject)) order.push(...shuffled(ids, `${testId}:${userId}:${subject}`));
   const optionOrders = Object.fromEntries(questions.map((q) => {
     const opts = Array.isArray(q.options) ? q.options as Array<{ id?: string }> : [];
-    return [q.id, shuffled(opts.map((o) => o.id).filter((id): id is string => typeof id === "string"), `${testId}:${userId}:${q.id}`)];
+    // Options keep their authored order so every student sees A, B, C, D in line.
+    return [q.id, opts.map((o) => o.id).filter((id): id is string => typeof id === "string")];
   }));
   const { data: attempt, error: aErr } = await supabase.from("test_attempts").insert({ test_id: testId, version_id: test.active_version_id, student_id: userId, question_order: order, option_orders: optionOrders, max_score: test.total_marks }).select("*").single();
   if (aErr) throw aErr;

@@ -10,7 +10,7 @@ export const listDoubts = createServerFn({ method: "GET" })
     // RLS scopes visibility per role. Also enrich with student name.
     const { data, error } = await context.supabase
       .from("doubts")
-      .select("id, student_id, subject, question, answer, answered_by, answered_at, created_at, visibility, specific_teacher_id, image_urls")
+      .select("id, student_id, subject, question, answer, answer_files, answered_by, answered_at, created_at, visibility, specific_teacher_id, image_urls")
       .order("created_at", { ascending: false })
       .limit(300);
     if (error) throw error;
@@ -103,9 +103,19 @@ export const createDoubt = createServerFn({ method: "POST" })
 export const answerDoubt = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => {
-    const i = input as { id?: string; answer?: string } | undefined;
-    if (!i?.id || !i.answer) throw new Error("Missing fields");
-    return { id: i.id, answer: i.answer.slice(0, 4000) };
+    const i = input as { id?: string; answer?: string; answer_files?: Array<{ path?: string; name?: string; type?: string }> } | undefined;
+    const answer = (i?.answer ?? "").slice(0, 4000);
+    const files = (Array.isArray(i?.answer_files) ? i!.answer_files! : [])
+      .slice(0, 6)
+      .filter((f) => typeof f?.path === "string" && f.path.length > 0)
+      .map((f) => ({
+        path: String(f.path).slice(0, 400),
+        name: String(f.name ?? "attachment").slice(0, 160),
+        type: String(f.type ?? "").slice(0, 100),
+      }));
+    if (!i?.id) throw new Error("Missing fields");
+    if (!answer.trim() && files.length === 0) throw new Error("Write an answer or attach a file.");
+    return { id: i.id, answer, answer_files: files };
   })
   .handler(async ({ data, context }) => {
     const { data: prof } = await context.supabase
@@ -114,6 +124,7 @@ export const answerDoubt = createServerFn({ method: "POST" })
       .from("doubts")
       .update({
         answer: data.answer,
+        answer_files: data.answer_files,
         answered_by: context.userId,
         answered_at: new Date().toISOString(),
       })
@@ -126,7 +137,7 @@ export const answerDoubt = createServerFn({ method: "POST" })
         user_id: doubt.student_id,
         category: "doubt",
         title: `✅ Your ${doubt.subject} doubt was answered`,
-        message: data.answer.slice(0, 140),
+        message: (data.answer.trim() || `${data.answer_files.length} attachment(s)`).slice(0, 140),
         link: "/dashboard/doubts",
         icon: "check",
         sender_id: context.userId,

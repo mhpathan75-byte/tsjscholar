@@ -234,9 +234,11 @@ function ExamPage() {
       </Gate>
     );
 
-  const optionOrder = data.attempt.option_orders?.[q.id] ?? [],
-    opts = Array.isArray(q.options) ? q.options : [],
-    ordered = [...opts].sort((a: any, b: any) => optionOrder.indexOf(a.id) - optionOrder.indexOf(b.id));
+  // Options are always presented in their authored order so the labels the
+  // student sees run A, B, C, D top to bottom.
+  const opts = Array.isArray(q.options) ? q.options : [],
+    ordered = opts;
+
 
   const palette = (
     <div className="space-y-5">
@@ -366,7 +368,7 @@ function ExamPage() {
                   placeholder="Enter numerical answer"
                 />
               ) : (
-                ordered.map((option: any) => (
+                ordered.map((option: any, optionIndex: number) => (
                   <button
                     key={option.id}
                     onClick={() => persist(option.id, "answered")}
@@ -375,13 +377,14 @@ function ExamPage() {
                     }`}
                   >
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border font-semibold">
-                      {option.id}
+                      {String.fromCharCode(65 + optionIndex)}
                     </span>
                     <span className="min-w-0 break-words pt-1">
                       <Markdown>{option.text}</Markdown>
                     </span>
                   </button>
                 ))
+
               )}
             </div>
 

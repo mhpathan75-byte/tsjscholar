@@ -28,7 +28,10 @@ type Doubt = {
   visibility: Visibility;
   specific_teacher_id: string | null;
   image_urls: string[];
+  answer_files: AnswerFile[] | null;
 };
+
+type AnswerFile = { path: string; name: string; type: string };
 
 type Teacher = { id: string; full_name: string; subject: string | null; role: string };
 
@@ -59,6 +62,9 @@ function DoubtsPage() {
   const [err, setErr] = useState<string | null>(null);
   const [answerDraft, setAnswerDraft] = useState<Record<string, string>>({});
   const [signedById, setSignedById] = useState<Record<string, string[]>>({});
+  const [answerFiles, setAnswerFiles] = useState<Record<string, File[]>>({});
+  const [answerSigned, setAnswerSigned] = useState<Record<string, string>>({});
+  const [answerBusy, setAnswerBusy] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const refresh = async () => {
@@ -79,6 +85,17 @@ function DoubtsPage() {
         setSignedById(next);
       } else {
         setSignedById({});
+      }
+
+      // Sign teacher answer attachments
+      const answerPaths = rows.flatMap((d) => (d.answer_files ?? []).map((f) => f.path));
+      if (answerPaths.length > 0) {
+        const res = await signUrls({ data: { paths: answerPaths } }) as { urls: string[] };
+        const map: Record<string, string> = {};
+        answerPaths.forEach((path, i) => { if (res.urls[i]) map[path] = res.urls[i]; });
+        setAnswerSigned(map);
+      } else {
+        setAnswerSigned({});
       }
     } catch { /* ignore */ }
   };
@@ -124,13 +141,26 @@ function DoubtsPage() {
   };
 
   const submitAnswer = async (id: string) => {
-    const a = answerDraft[id]?.trim();
-    if (!a) return;
+    const a = answerDraft[id]?.trim() ?? "";
+    const files = answerFiles[id] ?? [];
+    if (!a && files.length === 0) return;
+    setAnswerBusy(id); setErr(null);
     try {
-      await answer({ data: { id, answer: a } });
+      const uid = (await supabase.auth.getUser()).data.user?.id;
+      if (!uid) throw new Error("Not signed in");
+      const uploaded: AnswerFile[] = [];
+      for (const f of files) {
+        const key = `${uid}/answers/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${f.name.replace(/[^a-z0-9_.-]/gi, "_")}`;
+        const { error: upErr } = await supabase.storage.from("doubts").upload(key, f, { upsert: false, contentType: f.type || "application/octet-stream" });
+        if (upErr) throw upErr;
+        uploaded.push({ path: key, name: f.name, type: f.type || "" });
+      }
+      await answer({ data: { id, answer: a, answer_files: uploaded } });
       setAnswerDraft((d) => ({ ...d, [id]: "" }));
-      refresh();
-    } catch { /* ignore */ }
+      setAnswerFiles((d) => ({ ...d, [id]: [] }));
+      await refresh();
+    } catch (e) { setErr(e instanceof Error ? e.message : "Could not post answer."); }
+    finally { setAnswerBusy(null); }
   };
 
   return (
@@ -250,7 +280,26 @@ function DoubtsPage() {
             {d.answer && (
               <div className="mt-4 rounded-xl border-l-4 border-primary bg-muted/60 p-4">
                 <div className="text-[10px] uppercase tracking-widest text-primary">Answered by {d.answered_by_name ?? "Teacher"}</div>
-                <Markdown>{d.answer}</Markdown>
+                {d.answer && <Markdown>{d.answer}</Markdown>}
+                {(d.answer_files?.length ?? 0) > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {(d.answer_files ?? []).map((f) => {
+                      const url = answerSigned[f.path];
+                      if (!url) return null;
+                      const isImage = f.type.startsWith("image/") || /\.(png|jpe?g|gif|webp)$/i.test(f.name);
+                      return isImage ? (
+                        <a key={f.path} href={url} target="_blank" rel="noreferrer">
+                          <img src={url} alt={f.name} className="h-28 w-28 rounded-lg border border-border object-cover transition hover:opacity-80" />
+                        </a>
+                      ) : (
+                        <a key={f.path} href={url} target="_blank" rel="noreferrer"
+                          className="flex max-w-full items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-xs text-foreground hover:bg-muted">
+                          <span>📎</span><span className="truncate">{f.name}</span>
+                        </a>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             )}
 
@@ -260,14 +309,34 @@ function DoubtsPage() {
                   value={answerDraft[d.id] ?? ""}
                   onChange={(e) => setAnswerDraft((s) => ({ ...s, [d.id]: e.target.value }))}
                   rows={3}
-                  placeholder="Reply — supports **markdown** and $formulas$"
+                  placeholder="Reply — supports **markdown** and $formulas$ (optional if you attach a file)"
                   className="w-full resize-none rounded-xl border border-input bg-background px-4 py-3 text-sm text-foreground outline-none ring-primary/30 focus:ring-2"
                 />
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  {(answerFiles[d.id] ?? []).map((f, i) => (
+                    <span key={i} className="flex max-w-[12rem] items-center gap-1 rounded-lg border border-border bg-muted px-2 py-1 text-xs">
+                      <span className="truncate">{f.name}</span>
+                      <button type="button" aria-label="Remove attachment"
+                        onClick={() => setAnswerFiles((s2) => ({ ...s2, [d.id]: (s2[d.id] ?? []).filter((_, j) => j !== i) }))}
+                        className="text-destructive">×</button>
+                    </span>
+                  ))}
+                  <label className="cursor-pointer rounded-xl border border-dashed border-border px-3 py-2 text-xs text-muted-foreground hover:bg-muted">
+                    📎 Attach image / file
+                    <input type="file" multiple accept="image/*,.pdf,.doc,.docx,.ppt,.pptx,.txt"
+                      className="hidden"
+                      onChange={(e) => {
+                        const picked = Array.from(e.target.files ?? []).filter((f) => f.size <= 10 * 1024 * 1024);
+                        setAnswerFiles((s2) => ({ ...s2, [d.id]: [...(s2[d.id] ?? []), ...picked].slice(0, 6) }));
+                        e.target.value = "";
+                      }} />
+                  </label>
+                </div>
                 <button
                   onClick={() => submitAnswer(d.id)}
-                  disabled={!answerDraft[d.id]?.trim()}
+                  disabled={answerBusy === d.id || (!answerDraft[d.id]?.trim() && (answerFiles[d.id]?.length ?? 0) === 0)}
                   className="mt-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
-                >Post answer</button>
+                >{answerBusy === d.id ? "Posting…" : "Post answer"}</button>
               </div>
             )}
           </div>
