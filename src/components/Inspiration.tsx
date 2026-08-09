@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { MENTORS, mentorOfTheDayIndex } from "@/lib/mentors";
+import { MENTORS, mentorOfTheDayIndex, quoteOfTheDay } from "@/lib/mentors";
 import { getQuoteExplanation } from "@/lib/inspiration.functions";
 
 export function Inspiration() {
@@ -10,35 +10,37 @@ export function Inspiration() {
   const [busy, setBusy] = useState(false);
 
   const mentor = MENTORS[idx];
-  const explanation = text[mentor.id];
+  const quote = useMemo(() => quoteOfTheDay(mentor, idx), [mentor, idx]);
+  const cacheKey = `${mentor.id}::${quote}`;
+  const explanation = text[cacheKey];
 
   useEffect(() => {
     if (explanation !== undefined) return;
     let cancelled = false;
     setBusy(true);
-    explain({ data: { name: mentor.name, quote: mentor.quote } })
+    explain({ data: { name: mentor.name, quote } })
       .then((r: any) => {
-        if (!cancelled) setText((t) => ({ ...t, [mentor.id]: r?.explanation ?? "" }));
+        if (!cancelled) setText((t) => ({ ...t, [cacheKey]: r?.explanation ?? "" }));
       })
-      .catch(() => { if (!cancelled) setText((t) => ({ ...t, [mentor.id]: "" })); })
+      .catch(() => { if (!cancelled) setText((t) => ({ ...t, [cacheKey]: "" })); })
       .finally(() => { if (!cancelled) setBusy(false); });
     return () => { cancelled = true; };
-  }, [mentor.id]); // eslint-disable-line
+  }, [cacheKey]); // eslint-disable-line
 
   return (
     <section className="overflow-hidden rounded-3xl border border-border bg-card shadow-soft">
       <div className="grid gap-0 md:grid-cols-[220px_1fr]">
-        <div className="relative bg-soft-gold">
+        <div className="flex items-center justify-center bg-soft-gold p-4 md:p-3">
           <img
             src={mentor.image}
             alt={mentor.name}
             loading="lazy"
             width={512}
             height={512}
-            className="h-56 w-full object-cover object-top md:h-full"
+            className="max-h-44 w-auto max-w-full rounded-2xl object-contain sm:max-h-52 md:max-h-64"
           />
         </div>
-        <div className="flex flex-col p-6">
+        <div className="flex flex-col p-5 sm:p-6">
           <div className="flex items-center justify-between gap-3">
             <div className="text-[10px] uppercase tracking-[0.22em] text-gold">Today&rsquo;s inspiration</div>
             <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
@@ -46,9 +48,10 @@ export function Inspiration() {
             </div>
           </div>
 
-          <blockquote className="mt-3 font-display text-xl leading-snug text-foreground md:text-2xl">
-            &ldquo;{mentor.quote}&rdquo;
+          <blockquote className="mt-3 font-display text-lg leading-snug text-foreground sm:text-xl md:text-2xl">
+            &ldquo;{quote}&rdquo;
           </blockquote>
+
           <div className="mt-2 text-sm font-semibold text-foreground">{mentor.name}</div>
           <div className="text-xs text-muted-foreground">{mentor.role}</div>
 
