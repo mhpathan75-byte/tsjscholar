@@ -234,9 +234,11 @@ function ExamPage() {
       </Gate>
     );
 
-  const optionOrder = data.attempt.option_orders?.[q.id] ?? [],
-    opts = Array.isArray(q.options) ? q.options : [],
-    ordered = [...opts].sort((a: any, b: any) => optionOrder.indexOf(a.id) - optionOrder.indexOf(b.id));
+  // Options are always presented in their authored order so the labels the
+  // student sees run A, B, C, D top to bottom.
+  const opts = Array.isArray(q.options) ? q.options : [],
+    ordered = opts;
+
 
   const palette = (
     <div className="space-y-5">
