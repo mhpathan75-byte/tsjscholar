@@ -366,7 +366,7 @@ function ExamPage() {
                   placeholder="Enter numerical answer"
                 />
               ) : (
-                ordered.map((option: any) => (
+                ordered.map((option: any, optionIndex: number) => (
                   <button
                     key={option.id}
                     onClick={() => persist(option.id, "answered")}
@@ -375,13 +375,14 @@ function ExamPage() {
                     }`}
                   >
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border font-semibold">
-                      {option.id}
+                      {String.fromCharCode(65 + optionIndex)}
                     </span>
                     <span className="min-w-0 break-words pt-1">
                       <Markdown>{option.text}</Markdown>
                     </span>
                   </button>
                 ))
+
               )}
             </div>
 
