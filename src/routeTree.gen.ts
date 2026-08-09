@@ -29,7 +29,6 @@ import { Route as DashboardAshraRouteImport } from './routes/dashboard.ashra'
 import { Route as DashboardAnnouncementsRouteImport } from './routes/dashboard.announcements'
 import { Route as DashboardTestsIndexRouteImport } from './routes/dashboard.tests.index'
 import { Route as DashboardTestsTestIdRouteImport } from './routes/dashboard.tests.$testId'
-import { Route as ApiPublicSeedRouteImport } from './routes/api/public/seed'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -131,11 +130,6 @@ const DashboardTestsTestIdRoute = DashboardTestsTestIdRouteImport.update({
   path: '/$testId',
   getParentRoute: () => DashboardTestsRoute,
 } as any)
-const ApiPublicSeedRoute = ApiPublicSeedRouteImport.update({
-  id: '/api/public/seed',
-  path: '/api/public/seed',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -156,7 +150,6 @@ export interface FileRoutesByFullPath {
   '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
   '/exam/$attemptId': typeof ExamAttemptIdRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/api/public/seed': typeof ApiPublicSeedRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
   '/dashboard/tests/': typeof DashboardTestsIndexRoute
 }
@@ -177,7 +170,6 @@ export interface FileRoutesByTo {
   '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
   '/exam/$attemptId': typeof ExamAttemptIdRoute
   '/dashboard': typeof DashboardIndexRoute
-  '/api/public/seed': typeof ApiPublicSeedRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
   '/dashboard/tests': typeof DashboardTestsIndexRoute
 }
@@ -201,7 +193,6 @@ export interface FileRoutesById {
   '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
   '/exam/$attemptId': typeof ExamAttemptIdRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/api/public/seed': typeof ApiPublicSeedRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
   '/dashboard/tests/': typeof DashboardTestsIndexRoute
 }
@@ -226,7 +217,6 @@ export interface FileRouteTypes {
     | '/exam-results/$attemptId'
     | '/exam/$attemptId'
     | '/dashboard/'
-    | '/api/public/seed'
     | '/dashboard/tests/$testId'
     | '/dashboard/tests/'
   fileRoutesByTo: FileRoutesByTo
@@ -247,7 +237,6 @@ export interface FileRouteTypes {
     | '/exam-results/$attemptId'
     | '/exam/$attemptId'
     | '/dashboard'
-    | '/api/public/seed'
     | '/dashboard/tests/$testId'
     | '/dashboard/tests'
   id:
@@ -270,7 +259,6 @@ export interface FileRouteTypes {
     | '/exam-results/$attemptId'
     | '/exam/$attemptId'
     | '/dashboard/'
-    | '/api/public/seed'
     | '/dashboard/tests/$testId'
     | '/dashboard/tests/'
   fileRoutesById: FileRoutesById
@@ -281,7 +269,6 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRouteWithChildren
   ExamResultsAttemptIdRoute: typeof ExamResultsAttemptIdRoute
   ExamAttemptIdRoute: typeof ExamAttemptIdRoute
-  ApiPublicSeedRoute: typeof ApiPublicSeedRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -426,13 +413,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTestsTestIdRouteImport
       parentRoute: typeof DashboardTestsRoute
     }
-    '/api/public/seed': {
-      id: '/api/public/seed'
-      path: '/api/public/seed'
-      fullPath: '/api/public/seed'
-      preLoaderRoute: typeof ApiPublicSeedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -492,7 +472,6 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRouteWithChildren,
   ExamResultsAttemptIdRoute: ExamResultsAttemptIdRoute,
   ExamAttemptIdRoute: ExamAttemptIdRoute,
-  ApiPublicSeedRoute: ApiPublicSeedRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

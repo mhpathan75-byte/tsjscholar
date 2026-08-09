@@ -45,7 +45,15 @@ export const parseStudentList = createServerFn({ method: "POST" })
     return extractStudentsFromText(data.text);
   });
 
-/** Creates login accounts. AI-style auto-generated id + password per student. */
+/**
+ * Creates login accounts. AI-style auto-generated id + password per student.
+ *
+ * Deployment note: this deliberately avoids the Supabase service-role key so the
+ * app can run on Vercel while the backend stays on Lovable Cloud. Authorisation
+ * is enforced server-side (the caller must be a teacher/principal) and the
+ * accounts are created through the ordinary publishable-key sign-up endpoint on
+ * an isolated, session-less server client, so no caller session is touched.
+ */
 export const createStudentAccounts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((v: unknown) => ({ students: (Array.isArray((v as any)?.students) ? (v as any).students : []).slice(0, 100).map(cleanStudent) }))
@@ -53,10 +61,19 @@ export const createStudentAccounts = createServerFn({ method: "POST" })
     await assertStaff(context);
     if (!data.students.length) throw new Error("Add at least one student.");
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { createClient } = await import("@supabase/supabase-js");
     const { makePassword, makeUsername } = await import("@/lib/students.server");
 
-    const { data: existing } = await supabaseAdmin.from("profiles").select("username");
+    const url = process.env["SUPABASE_URL"];
+    const publishable = process.env["SUPABASE_PUBLISHABLE_KEY"];
+    if (!url || !publishable) throw new Error("Backend is not configured.");
+
+    // Session-less client: signing up here never affects the teacher's session.
+    const signupClient = createClient(url, publishable, {
+      auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storage: undefined },
+    });
+
+    const { data: existing } = await context.supabase.from("profiles").select("username");
     const taken = new Set((existing ?? []).map((p) => String(p.username ?? "").toLowerCase()).filter(Boolean));
 
     const created: Array<{ full_name: string; email: string; username: string; password: string; class_level: number; exam_track: string; status: string }> = [];
@@ -64,16 +81,17 @@ export const createStudentAccounts = createServerFn({ method: "POST" })
       const username = makeUsername(student.full_name, taken);
       const password = makePassword(student.full_name);
       const email = `${username}@ntsj.app`;
-      const { error } = await supabaseAdmin.auth.admin.createUser({
+      const { error } = await signupClient.auth.signUp({
         email,
         password,
-        email_confirm: true,
-        user_metadata: {
-          full_name: student.full_name,
-          role: "student",
-          username,
-          exam_track: student.exam_track,
-          class_level: String(student.class_level),
+        options: {
+          data: {
+            full_name: student.full_name,
+            role: "student",
+            username,
+            exam_track: student.exam_track,
+            class_level: String(student.class_level),
+          },
         },
       });
       created.push({
@@ -84,3 +102,4 @@ export const createStudentAccounts = createServerFn({ method: "POST" })
     }
     return { created };
   });
+
