@@ -1,7 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "buildCommand": "bun run build",
   "installCommand": "bun install",
-  "outputDirectory": ".output/public"
+  "buildCommand": "NITRO_PRESET=vercel bun run build",
+  "build": {
+    "env": {
+      "NITRO_PRESET": "vercel"
+    }
+  }
 }
