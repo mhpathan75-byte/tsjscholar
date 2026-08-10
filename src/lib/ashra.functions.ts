@@ -72,12 +72,14 @@ export const ashraSend = createServerFn({ method: "POST" })
       : "";
 
     const priorMessages = (history ?? []).slice(0, -1); // exclude the user msg we just saved
-    const currentUserContent = (data.imageDataUrls && data.imageDataUrls.length > 0)
-      ? [
-          { type: "text", text: data.text },
-          ...data.imageDataUrls.map((url) => ({ type: "image_url", image_url: { url } })),
-        ]
-      : data.text;
+    const currentUserContent: import("@/lib/ai-gateway.server").ChatContent =
+      (data.imageDataUrls && data.imageDataUrls.length > 0)
+        ? [
+            { type: "text" as const, text: data.text },
+            ...data.imageDataUrls.map((url) => ({ type: "image_url" as const, image_url: { url } })),
+          ]
+        : data.text;
+
 
     const messages = [
       { role: "system" as const, content: SYSTEM_PROMPT + personal },
