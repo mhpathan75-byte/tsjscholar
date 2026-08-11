@@ -13,6 +13,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as LiveControlTokenRouteImport } from './routes/live-control.$token'
 import { Route as ExamAttemptIdRouteImport } from './routes/exam.$attemptId'
 import { Route as ExamResultsAttemptIdRouteImport } from './routes/exam-results.$attemptId'
 import { Route as DashboardTestsRouteImport } from './routes/dashboard.tests'
@@ -28,7 +29,9 @@ import { Route as DashboardCalendarRouteImport } from './routes/dashboard.calend
 import { Route as DashboardAshraRouteImport } from './routes/dashboard.ashra'
 import { Route as DashboardAnnouncementsRouteImport } from './routes/dashboard.announcements'
 import { Route as DashboardTestsIndexRouteImport } from './routes/dashboard.tests.index'
+import { Route as DashboardLiveIndexRouteImport } from './routes/dashboard.live.index'
 import { Route as DashboardTestsTestIdRouteImport } from './routes/dashboard.tests.$testId'
+import { Route as DashboardLiveClassIdRouteImport } from './routes/dashboard.live.$classId'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -49,6 +52,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DashboardRoute,
+} as any)
+const LiveControlTokenRoute = LiveControlTokenRouteImport.update({
+  id: '/live-control/$token',
+  path: '/live-control/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ExamAttemptIdRoute = ExamAttemptIdRouteImport.update({
   id: '/exam/$attemptId',
@@ -125,10 +133,20 @@ const DashboardTestsIndexRoute = DashboardTestsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardTestsRoute,
 } as any)
+const DashboardLiveIndexRoute = DashboardLiveIndexRouteImport.update({
+  id: '/live/',
+  path: '/live/',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardTestsTestIdRoute = DashboardTestsTestIdRouteImport.update({
   id: '/$testId',
   path: '/$testId',
   getParentRoute: () => DashboardTestsRoute,
+} as any)
+const DashboardLiveClassIdRoute = DashboardLiveClassIdRouteImport.update({
+  id: '/live/$classId',
+  path: '/live/$classId',
+  getParentRoute: () => DashboardRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -149,8 +167,11 @@ export interface FileRoutesByFullPath {
   '/dashboard/tests': typeof DashboardTestsRouteWithChildren
   '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
   '/exam/$attemptId': typeof ExamAttemptIdRoute
+  '/live-control/$token': typeof LiveControlTokenRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/live/$classId': typeof DashboardLiveClassIdRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
+  '/dashboard/live/': typeof DashboardLiveIndexRoute
   '/dashboard/tests/': typeof DashboardTestsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -169,8 +190,11 @@ export interface FileRoutesByTo {
   '/dashboard/students': typeof DashboardStudentsRoute
   '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
   '/exam/$attemptId': typeof ExamAttemptIdRoute
+  '/live-control/$token': typeof LiveControlTokenRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/live/$classId': typeof DashboardLiveClassIdRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
+  '/dashboard/live': typeof DashboardLiveIndexRoute
   '/dashboard/tests': typeof DashboardTestsIndexRoute
 }
 export interface FileRoutesById {
@@ -192,8 +216,11 @@ export interface FileRoutesById {
   '/dashboard/tests': typeof DashboardTestsRouteWithChildren
   '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
   '/exam/$attemptId': typeof ExamAttemptIdRoute
+  '/live-control/$token': typeof LiveControlTokenRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/live/$classId': typeof DashboardLiveClassIdRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
+  '/dashboard/live/': typeof DashboardLiveIndexRoute
   '/dashboard/tests/': typeof DashboardTestsIndexRoute
 }
 export interface FileRouteTypes {
@@ -216,8 +243,11 @@ export interface FileRouteTypes {
     | '/dashboard/tests'
     | '/exam-results/$attemptId'
     | '/exam/$attemptId'
+    | '/live-control/$token'
     | '/dashboard/'
+    | '/dashboard/live/$classId'
     | '/dashboard/tests/$testId'
+    | '/dashboard/live/'
     | '/dashboard/tests/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -236,8 +266,11 @@ export interface FileRouteTypes {
     | '/dashboard/students'
     | '/exam-results/$attemptId'
     | '/exam/$attemptId'
+    | '/live-control/$token'
     | '/dashboard'
+    | '/dashboard/live/$classId'
     | '/dashboard/tests/$testId'
+    | '/dashboard/live'
     | '/dashboard/tests'
   id:
     | '__root__'
@@ -258,8 +291,11 @@ export interface FileRouteTypes {
     | '/dashboard/tests'
     | '/exam-results/$attemptId'
     | '/exam/$attemptId'
+    | '/live-control/$token'
     | '/dashboard/'
+    | '/dashboard/live/$classId'
     | '/dashboard/tests/$testId'
+    | '/dashboard/live/'
     | '/dashboard/tests/'
   fileRoutesById: FileRoutesById
 }
@@ -269,6 +305,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRouteWithChildren
   ExamResultsAttemptIdRoute: typeof ExamResultsAttemptIdRoute
   ExamAttemptIdRoute: typeof ExamAttemptIdRoute
+  LiveControlTokenRoute: typeof LiveControlTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -300,6 +337,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
+    }
+    '/live-control/$token': {
+      id: '/live-control/$token'
+      path: '/live-control/$token'
+      fullPath: '/live-control/$token'
+      preLoaderRoute: typeof LiveControlTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/exam/$attemptId': {
       id: '/exam/$attemptId'
@@ -406,12 +450,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTestsIndexRouteImport
       parentRoute: typeof DashboardTestsRoute
     }
+    '/dashboard/live/': {
+      id: '/dashboard/live/'
+      path: '/live'
+      fullPath: '/dashboard/live/'
+      preLoaderRoute: typeof DashboardLiveIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/tests/$testId': {
       id: '/dashboard/tests/$testId'
       path: '/$testId'
       fullPath: '/dashboard/tests/$testId'
       preLoaderRoute: typeof DashboardTestsTestIdRouteImport
       parentRoute: typeof DashboardTestsRoute
+    }
+    '/dashboard/live/$classId': {
+      id: '/dashboard/live/$classId'
+      path: '/live/$classId'
+      fullPath: '/dashboard/live/$classId'
+      preLoaderRoute: typeof DashboardLiveClassIdRouteImport
+      parentRoute: typeof DashboardRoute
     }
   }
 }
@@ -444,6 +502,8 @@ interface DashboardRouteChildren {
   DashboardStudentsRoute: typeof DashboardStudentsRoute
   DashboardTestsRoute: typeof DashboardTestsRouteWithChildren
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardLiveClassIdRoute: typeof DashboardLiveClassIdRoute
+  DashboardLiveIndexRoute: typeof DashboardLiveIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
@@ -460,6 +520,8 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardStudentsRoute: DashboardStudentsRoute,
   DashboardTestsRoute: DashboardTestsRouteWithChildren,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardLiveClassIdRoute: DashboardLiveClassIdRoute,
+  DashboardLiveIndexRoute: DashboardLiveIndexRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
@@ -472,17 +534,8 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRouteWithChildren,
   ExamResultsAttemptIdRoute: ExamResultsAttemptIdRoute,
   ExamAttemptIdRoute: ExamAttemptIdRoute,
+  LiveControlTokenRoute: LiveControlTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
