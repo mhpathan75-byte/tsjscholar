@@ -79,7 +79,8 @@ export const moderatorToggle = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }) => {
     const { db, cls } = await classByToken(data.token);
-    const { error } = await db.from("live_classes").update({ [data.field]: data.value }).eq("id", cls.id);
+    const patch = { [data.field]: data.value } as Record<string, boolean>;
+    const { error } = await db.from("live_classes").update(patch as never).eq("id", cls.id);
     if (error) throw error;
     return { ok: true };
   });
