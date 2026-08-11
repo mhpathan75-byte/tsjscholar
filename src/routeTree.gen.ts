@@ -30,6 +30,7 @@ import { Route as DashboardAnnouncementsRouteImport } from './routes/dashboard.a
 import { Route as DashboardTestsIndexRouteImport } from './routes/dashboard.tests.index'
 import { Route as DashboardLiveIndexRouteImport } from './routes/dashboard.live.index'
 import { Route as DashboardTestsTestIdRouteImport } from './routes/dashboard.tests.$testId'
+import { Route as DashboardLiveClassIdRouteImport } from './routes/dashboard.live.$classId'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -136,6 +137,11 @@ const DashboardTestsTestIdRoute = DashboardTestsTestIdRouteImport.update({
   path: '/$testId',
   getParentRoute: () => DashboardTestsRoute,
 } as any)
+const DashboardLiveClassIdRoute = DashboardLiveClassIdRouteImport.update({
+  id: '/live/$classId',
+  path: '/live/$classId',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -156,6 +162,7 @@ export interface FileRoutesByFullPath {
   '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
   '/exam/$attemptId': typeof ExamAttemptIdRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/live/$classId': typeof DashboardLiveClassIdRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
   '/dashboard/live/': typeof DashboardLiveIndexRoute
   '/dashboard/tests/': typeof DashboardTestsIndexRoute
@@ -177,6 +184,7 @@ export interface FileRoutesByTo {
   '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
   '/exam/$attemptId': typeof ExamAttemptIdRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/live/$classId': typeof DashboardLiveClassIdRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
   '/dashboard/live': typeof DashboardLiveIndexRoute
   '/dashboard/tests': typeof DashboardTestsIndexRoute
@@ -201,6 +209,7 @@ export interface FileRoutesById {
   '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
   '/exam/$attemptId': typeof ExamAttemptIdRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/live/$classId': typeof DashboardLiveClassIdRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
   '/dashboard/live/': typeof DashboardLiveIndexRoute
   '/dashboard/tests/': typeof DashboardTestsIndexRoute
@@ -226,6 +235,7 @@ export interface FileRouteTypes {
     | '/exam-results/$attemptId'
     | '/exam/$attemptId'
     | '/dashboard/'
+    | '/dashboard/live/$classId'
     | '/dashboard/tests/$testId'
     | '/dashboard/live/'
     | '/dashboard/tests/'
@@ -247,6 +257,7 @@ export interface FileRouteTypes {
     | '/exam-results/$attemptId'
     | '/exam/$attemptId'
     | '/dashboard'
+    | '/dashboard/live/$classId'
     | '/dashboard/tests/$testId'
     | '/dashboard/live'
     | '/dashboard/tests'
@@ -270,6 +281,7 @@ export interface FileRouteTypes {
     | '/exam-results/$attemptId'
     | '/exam/$attemptId'
     | '/dashboard/'
+    | '/dashboard/live/$classId'
     | '/dashboard/tests/$testId'
     | '/dashboard/live/'
     | '/dashboard/tests/'
@@ -432,6 +444,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTestsTestIdRouteImport
       parentRoute: typeof DashboardTestsRoute
     }
+    '/dashboard/live/$classId': {
+      id: '/dashboard/live/$classId'
+      path: '/live/$classId'
+      fullPath: '/dashboard/live/$classId'
+      preLoaderRoute: typeof DashboardLiveClassIdRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
@@ -463,6 +482,7 @@ interface DashboardRouteChildren {
   DashboardStudentsRoute: typeof DashboardStudentsRoute
   DashboardTestsRoute: typeof DashboardTestsRouteWithChildren
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardLiveClassIdRoute: typeof DashboardLiveClassIdRoute
   DashboardLiveIndexRoute: typeof DashboardLiveIndexRoute
 }
 
@@ -480,6 +500,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardStudentsRoute: DashboardStudentsRoute,
   DashboardTestsRoute: DashboardTestsRouteWithChildren,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardLiveClassIdRoute: DashboardLiveClassIdRoute,
   DashboardLiveIndexRoute: DashboardLiveIndexRoute,
 }
 
