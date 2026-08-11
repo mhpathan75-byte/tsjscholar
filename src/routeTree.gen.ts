@@ -28,6 +28,7 @@ import { Route as DashboardCalendarRouteImport } from './routes/dashboard.calend
 import { Route as DashboardAshraRouteImport } from './routes/dashboard.ashra'
 import { Route as DashboardAnnouncementsRouteImport } from './routes/dashboard.announcements'
 import { Route as DashboardTestsIndexRouteImport } from './routes/dashboard.tests.index'
+import { Route as DashboardLiveIndexRouteImport } from './routes/dashboard.live.index'
 import { Route as DashboardTestsTestIdRouteImport } from './routes/dashboard.tests.$testId'
 
 const DashboardRoute = DashboardRouteImport.update({
@@ -125,6 +126,11 @@ const DashboardTestsIndexRoute = DashboardTestsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardTestsRoute,
 } as any)
+const DashboardLiveIndexRoute = DashboardLiveIndexRouteImport.update({
+  id: '/live/',
+  path: '/live/',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardTestsTestIdRoute = DashboardTestsTestIdRouteImport.update({
   id: '/$testId',
   path: '/$testId',
@@ -151,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/exam/$attemptId': typeof ExamAttemptIdRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
+  '/dashboard/live/': typeof DashboardLiveIndexRoute
   '/dashboard/tests/': typeof DashboardTestsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -171,6 +178,7 @@ export interface FileRoutesByTo {
   '/exam/$attemptId': typeof ExamAttemptIdRoute
   '/dashboard': typeof DashboardIndexRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
+  '/dashboard/live': typeof DashboardLiveIndexRoute
   '/dashboard/tests': typeof DashboardTestsIndexRoute
 }
 export interface FileRoutesById {
@@ -194,6 +202,7 @@ export interface FileRoutesById {
   '/exam/$attemptId': typeof ExamAttemptIdRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
+  '/dashboard/live/': typeof DashboardLiveIndexRoute
   '/dashboard/tests/': typeof DashboardTestsIndexRoute
 }
 export interface FileRouteTypes {
@@ -218,6 +227,7 @@ export interface FileRouteTypes {
     | '/exam/$attemptId'
     | '/dashboard/'
     | '/dashboard/tests/$testId'
+    | '/dashboard/live/'
     | '/dashboard/tests/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -238,6 +248,7 @@ export interface FileRouteTypes {
     | '/exam/$attemptId'
     | '/dashboard'
     | '/dashboard/tests/$testId'
+    | '/dashboard/live'
     | '/dashboard/tests'
   id:
     | '__root__'
@@ -260,6 +271,7 @@ export interface FileRouteTypes {
     | '/exam/$attemptId'
     | '/dashboard/'
     | '/dashboard/tests/$testId'
+    | '/dashboard/live/'
     | '/dashboard/tests/'
   fileRoutesById: FileRoutesById
 }
@@ -406,6 +418,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTestsIndexRouteImport
       parentRoute: typeof DashboardTestsRoute
     }
+    '/dashboard/live/': {
+      id: '/dashboard/live/'
+      path: '/live'
+      fullPath: '/dashboard/live/'
+      preLoaderRoute: typeof DashboardLiveIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/tests/$testId': {
       id: '/dashboard/tests/$testId'
       path: '/$testId'
@@ -444,6 +463,7 @@ interface DashboardRouteChildren {
   DashboardStudentsRoute: typeof DashboardStudentsRoute
   DashboardTestsRoute: typeof DashboardTestsRouteWithChildren
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardLiveIndexRoute: typeof DashboardLiveIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
@@ -460,6 +480,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardStudentsRoute: DashboardStudentsRoute,
   DashboardTestsRoute: DashboardTestsRouteWithChildren,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardLiveIndexRoute: DashboardLiveIndexRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
@@ -476,13 +497,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
