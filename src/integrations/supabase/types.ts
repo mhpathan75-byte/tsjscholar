@@ -387,6 +387,227 @@ export type Database = {
           },
         ]
       }
+      live_classes: {
+        Row: {
+          broadcast_active: boolean
+          chat_enabled: boolean
+          class_level: number | null
+          created_at: string
+          description: string | null
+          doubts_enabled: boolean
+          duration_seconds: number | null
+          ended_at: string | null
+          id: string
+          moderator_token: string
+          reactions_enabled: boolean
+          recording_mime: string | null
+          recording_path: string | null
+          scheduled_at: string | null
+          started_at: string | null
+          status: string
+          subject: string | null
+          teacher_id: string
+          teacher_name: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          broadcast_active?: boolean
+          chat_enabled?: boolean
+          class_level?: number | null
+          created_at?: string
+          description?: string | null
+          doubts_enabled?: boolean
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          moderator_token?: string
+          reactions_enabled?: boolean
+          recording_mime?: string | null
+          recording_path?: string | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: string
+          subject?: string | null
+          teacher_id: string
+          teacher_name?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          broadcast_active?: boolean
+          chat_enabled?: boolean
+          class_level?: number | null
+          created_at?: string
+          description?: string | null
+          doubts_enabled?: boolean
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          moderator_token?: string
+          reactions_enabled?: boolean
+          recording_mime?: string | null
+          recording_path?: string | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: string
+          subject?: string | null
+          teacher_id?: string
+          teacher_name?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      live_messages: {
+        Row: {
+          author_name: string
+          author_role: string
+          body: string
+          class_id: string
+          created_at: string
+          hidden: boolean
+          id: string
+          image_path: string | null
+          kind: string
+          resolved: boolean
+          user_id: string
+        }
+        Insert: {
+          author_name?: string
+          author_role?: string
+          body?: string
+          class_id: string
+          created_at?: string
+          hidden?: boolean
+          id?: string
+          image_path?: string | null
+          kind?: string
+          resolved?: boolean
+          user_id: string
+        }
+        Update: {
+          author_name?: string
+          author_role?: string
+          body?: string
+          class_id?: string
+          created_at?: string
+          hidden?: boolean
+          id?: string
+          image_path?: string | null
+          kind?: string
+          resolved?: boolean
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_messages_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "live_classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_reactions: {
+        Row: {
+          class_id: string
+          created_at: string
+          emoji: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          class_id: string
+          created_at?: string
+          emoji: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          class_id?: string
+          created_at?: string
+          emoji?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_reactions_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "live_classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_segments: {
+        Row: {
+          class_id: string
+          created_at: string
+          id: string
+          is_init: boolean
+          mime: string
+          path: string
+          seq: number
+        }
+        Insert: {
+          class_id: string
+          created_at?: string
+          id?: string
+          is_init?: boolean
+          mime?: string
+          path: string
+          seq: number
+        }
+        Update: {
+          class_id?: string
+          created_at?: string
+          id?: string
+          is_init?: boolean
+          mime?: string
+          path?: string
+          seq?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_segments_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "live_classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_watch_progress: {
+        Row: {
+          class_id: string
+          position_seconds: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          class_id: string
+          position_seconds?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          class_id?: string
+          position_seconds?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_watch_progress_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "live_classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       material_favorites: {
         Row: {
           created_at: string
