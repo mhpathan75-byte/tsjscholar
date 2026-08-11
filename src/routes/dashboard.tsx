@@ -16,6 +16,7 @@ type NavItem = { label: string; d: string; to: string; disabled?: boolean; mark?
 
 const NAV_COMMON: NavItem[] = [
   { label: "Overview", d: "M3 12l9-9 9 9v9a2 2 0 01-2 2h-4v-6h-6v6H5a2 2 0 01-2-2v-9z", to: "/dashboard" },
+  { label: "Live Class", d: "M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 6h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z", to: "/dashboard/live" },
   { label: "Ashra", d: "", to: "/dashboard/ashra", mark: "ashra" },
   { label: "Glimpect", d: "", to: "/dashboard/glimpect", mark: "glimpect" },
   { label: "Doubt Room", d: "M21 15a2 2 0 01-2 2H8l-5 4V5a2 2 0 012-2h14a2 2 0 012 2v10z", to: "/dashboard/doubts" },

@@ -13,6 +13,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as LiveControlTokenRouteImport } from './routes/live-control.$token'
 import { Route as ExamAttemptIdRouteImport } from './routes/exam.$attemptId'
 import { Route as ExamResultsAttemptIdRouteImport } from './routes/exam-results.$attemptId'
 import { Route as DashboardTestsRouteImport } from './routes/dashboard.tests'
@@ -51,6 +52,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DashboardRoute,
+} as any)
+const LiveControlTokenRoute = LiveControlTokenRouteImport.update({
+  id: '/live-control/$token',
+  path: '/live-control/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ExamAttemptIdRoute = ExamAttemptIdRouteImport.update({
   id: '/exam/$attemptId',
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/tests': typeof DashboardTestsRouteWithChildren
   '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
   '/exam/$attemptId': typeof ExamAttemptIdRoute
+  '/live-control/$token': typeof LiveControlTokenRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/live/$classId': typeof DashboardLiveClassIdRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
@@ -183,6 +190,7 @@ export interface FileRoutesByTo {
   '/dashboard/students': typeof DashboardStudentsRoute
   '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
   '/exam/$attemptId': typeof ExamAttemptIdRoute
+  '/live-control/$token': typeof LiveControlTokenRoute
   '/dashboard': typeof DashboardIndexRoute
   '/dashboard/live/$classId': typeof DashboardLiveClassIdRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
@@ -208,6 +216,7 @@ export interface FileRoutesById {
   '/dashboard/tests': typeof DashboardTestsRouteWithChildren
   '/exam-results/$attemptId': typeof ExamResultsAttemptIdRoute
   '/exam/$attemptId': typeof ExamAttemptIdRoute
+  '/live-control/$token': typeof LiveControlTokenRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/live/$classId': typeof DashboardLiveClassIdRoute
   '/dashboard/tests/$testId': typeof DashboardTestsTestIdRoute
@@ -234,6 +243,7 @@ export interface FileRouteTypes {
     | '/dashboard/tests'
     | '/exam-results/$attemptId'
     | '/exam/$attemptId'
+    | '/live-control/$token'
     | '/dashboard/'
     | '/dashboard/live/$classId'
     | '/dashboard/tests/$testId'
@@ -256,6 +266,7 @@ export interface FileRouteTypes {
     | '/dashboard/students'
     | '/exam-results/$attemptId'
     | '/exam/$attemptId'
+    | '/live-control/$token'
     | '/dashboard'
     | '/dashboard/live/$classId'
     | '/dashboard/tests/$testId'
@@ -280,6 +291,7 @@ export interface FileRouteTypes {
     | '/dashboard/tests'
     | '/exam-results/$attemptId'
     | '/exam/$attemptId'
+    | '/live-control/$token'
     | '/dashboard/'
     | '/dashboard/live/$classId'
     | '/dashboard/tests/$testId'
@@ -293,6 +305,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRouteWithChildren
   ExamResultsAttemptIdRoute: typeof ExamResultsAttemptIdRoute
   ExamAttemptIdRoute: typeof ExamAttemptIdRoute
+  LiveControlTokenRoute: typeof LiveControlTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -324,6 +337,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
+    }
+    '/live-control/$token': {
+      id: '/live-control/$token'
+      path: '/live-control/$token'
+      fullPath: '/live-control/$token'
+      preLoaderRoute: typeof LiveControlTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/exam/$attemptId': {
       id: '/exam/$attemptId'
@@ -514,6 +534,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRouteWithChildren,
   ExamResultsAttemptIdRoute: ExamResultsAttemptIdRoute,
   ExamAttemptIdRoute: ExamAttemptIdRoute,
+  LiveControlTokenRoute: LiveControlTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
