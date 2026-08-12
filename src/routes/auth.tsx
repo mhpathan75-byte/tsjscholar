@@ -6,20 +6,27 @@ import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//") ? s.next : undefined,
+  }),
   head: () => ({ meta: [{ title: "Sign in — TSJ Scholar Palanpur" }] }),
 });
 
 function AuthPage() {
   const { signIn, user, profile, loading } = useAuth();
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (!loading && user && profile) navigate({ to: "/dashboard" });
-  }, [loading, user, profile, navigate]);
+    if (!loading && user && profile) {
+      if (next) window.location.href = next;
+      else navigate({ to: "/dashboard" });
+    }
+  }, [loading, user, profile, navigate, next]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
